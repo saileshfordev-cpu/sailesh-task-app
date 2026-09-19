@@ -1,0 +1,83 @@
+[debug] [2026-09-19T14:52:54.474Z] ----------------------------------------------------------------------
+[debug] [2026-09-19T14:52:54.476Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js projects:list --json
+[debug] [2026-09-19T14:52:54.476Z] CLI Version:   15.30.1
+[debug] [2026-09-19T14:52:54.476Z] Platform:      win32
+[debug] [2026-09-19T14:52:54.477Z] Node Version:  v24.16.0
+[debug] [2026-09-19T14:52:54.477Z] Detected Agent: unknown
+[debug] [2026-09-19T14:52:54.477Z] Time:          Sat Sep 19 2026 20:37:54 GMT+0545 (Nepal Time)
+[debug] [2026-09-19T14:52:54.477Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-19T14:52:54.492Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-09-19T14:52:54.535Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-09-19T14:52:54.535Z] > authorizing via signed-in user (pa.sailesh23@ncmt.edu.np)
+[debug] [2026-09-19T14:52:54.538Z] Checked if tokens are valid: false, expires at: 1789490780636
+[debug] [2026-09-19T14:52:54.538Z] Checked if tokens are valid: false, expires at: 1789490780636
+[debug] [2026-09-19T14:52:54.538Z] > refreshing access token with scopes: []
+[debug] [2026-09-19T14:52:54.540Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-19T14:52:54.540Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-19T14:52:54.835Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-19T14:52:54.836Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-09-19T14:52:54.836Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-09-19T14:52:55.138Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:178:12)
+    at refreshTokens (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:607:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getAccessToken (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:53:18)
+    at async Client.addAuthHeader (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:209:21)
+    at async Client.request (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:156:34)
+    at async getProjectPage (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:287:17)
+    at async getFirebaseProjectPage (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:304:23)
+    at async listFirebaseProjects (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:333:29)
+    at async Command.actionFn (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\projects-list.js:51:20)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+[debug] [2026-09-19T14:52:55.243Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-09-19T14:52:55.243Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-09-19T14:53:26.871Z] ----------------------------------------------------------------------
+[debug] [2026-09-19T14:53:26.874Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js projects:create flutter-app-18 --json
+[debug] [2026-09-19T14:53:26.875Z] CLI Version:   15.30.1
+[debug] [2026-09-19T14:53:26.875Z] Platform:      win32
+[debug] [2026-09-19T14:53:26.875Z] Node Version:  v24.16.0
+[debug] [2026-09-19T14:53:26.875Z] Detected Agent: unknown
+[debug] [2026-09-19T14:53:26.875Z] Time:          Sat Sep 19 2026 20:38:26 GMT+0545 (Nepal Time)
+[debug] [2026-09-19T14:53:26.875Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-19T14:53:26.902Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-09-19T14:53:26.903Z] > authorizing via signed-in user (pa.sailesh23@ncmt.edu.np)
+[debug] [2026-09-19T14:53:26.922Z] Checked if tokens are valid: false, expires at: 1789490780636
+[debug] [2026-09-19T14:53:26.922Z] Checked if tokens are valid: false, expires at: 1789490780636
+[debug] [2026-09-19T14:53:26.922Z] > refreshing access token with scopes: []
+[debug] [2026-09-19T14:53:26.925Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-19T14:53:26.925Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-19T14:53:27.215Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-19T14:53:27.215Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-09-19T14:53:27.453Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:178:12)
+    at refreshTokens (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:607:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async getAccessToken (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:53:18)
+    at async Client.addAuthHeader (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:209:21)
+    at async Client.request (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:156:34)
+    at async createCloudProject (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:231:26)
+    at async createFirebaseProjectAndLog (C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:102:9)
+    at async C:\Users\ACER\AppData\Roaming\npm\node_modules\firebase-tools\lib\command.js:280:28
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
