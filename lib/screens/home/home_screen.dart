@@ -29,14 +29,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _deleteWithUndo(BuildContext context, TaskModel task) async {
-    await context.read<TaskProvider>().deleteTask(task);
+    final provider = context.read<TaskProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    await provider.deleteTask(task);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
+    messenger.showSnackBar(
       SnackBar(
         content: const Text('Task deleted'),
         action: SnackBarAction(
           label: 'Undo',
-          onPressed: () => context.read<TaskProvider>().undoDelete(),
+          onPressed: () => provider.undoDelete(),
         ),
         duration: const Duration(seconds: 4),
       ),
