@@ -8,6 +8,7 @@ import '../theme/app_theme.dart';
 class TaskTile extends StatefulWidget {
   final TaskModel task;
   final VoidCallback onToggle;
+  final VoidCallback onStar;
   final VoidCallback onTap;
   final Future<bool> Function() onConfirmDelete;
   final VoidCallback onDeleted;
@@ -16,6 +17,7 @@ class TaskTile extends StatefulWidget {
     super.key,
     required this.task,
     required this.onToggle,
+    required this.onStar,
     required this.onTap,
     required this.onConfirmDelete,
     required this.onDeleted,
@@ -55,29 +57,26 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
 
   Color _priorityColor() {
     switch (widget.task.priority) {
-      case TaskPriority.high:
-        return AppColors.danger;
-      case TaskPriority.medium:
-        return AppColors.warning;
-      case TaskPriority.low:
-        return AppColors.success;
+      case TaskPriority.high: return AppColors.danger;
+      case TaskPriority.medium: return AppColors.warning;
+      case TaskPriority.low: return AppColors.success;
     }
   }
 
-  String _priorityLabel() {
-    switch (widget.task.priority) {
-      case TaskPriority.high:
-        return '🔴 High';
-      case TaskPriority.medium:
-        return '🟡 Medium';
-      case TaskPriority.low:
-        return '🟢 Low';
+  String _categoryEmoji() {
+    switch (widget.task.category) {
+      case TaskCategory.personal: return '👤';
+      case TaskCategory.work: return '💼';
+      case TaskCategory.shopping: return '🛒';
+      case TaskCategory.health: return '❤️';
+      case TaskCategory.other: return '📌';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isOverdue = widget.task.isOverdue;
 
     return Dismissible(
       key: ValueKey(widget.task.id),
@@ -86,10 +85,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
       onDismissed: (_) => widget.onDeleted(),
       background: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: AppColors.danger,
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(color: AppColors.danger, borderRadius: BorderRadius.circular(12)),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: const Column(
@@ -117,9 +113,14 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                   ? Container(
                       height: 80,
                       decoration: BoxDecoration(
-                        color: widget.task.isDone ? AppColors.success.withValues(alpha: 0.15) : AppColors.seed.withValues(alpha: 0.1),
+                        color: widget.task.isDone
+                            ? AppColors.success.withValues(alpha: 0.15)
+                            : AppColors.seed.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: widget.task.isDone ? AppColors.success : AppColors.seed, width: 1.5),
+                        border: Border.all(
+                          color: widget.task.isDone ? AppColors.success : AppColors.seed,
+                          width: 1.5,
+                        ),
                       ),
                       child: Center(
                         child: Transform(
@@ -137,6 +138,12 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
             );
           },
           child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: isOverdue
+                  ? const BorderSide(color: AppColors.danger, width: 1.5)
+                  : BorderSide.none,
+            ),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: widget.onTap,
@@ -145,7 +152,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Animated circular checkbox
+                    // Checkbox
                     GestureDetector(
                       onTap: _handleToggle,
                       child: AnimatedContainer(
@@ -153,7 +160,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                         curve: Curves.elasticOut,
                         width: 26,
                         height: 26,
-                        margin: const EdgeInsets.only(top: 1),
+                        margin: const EdgeInsets.only(top: 2),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: widget.task.isDone ? AppColors.success : Colors.transparent,
@@ -171,6 +178,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                       ),
                     ),
                     const SizedBox(width: 12),
+                    // Content
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,17 +195,18 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                                   child: Text(widget.task.title),
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: _priorityColor().withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  _priorityLabel(),
-                                  style: TextStyle(color: _priorityColor(), fontSize: 11, fontWeight: FontWeight.w600),
+                              // Star button
+                              GestureDetector(
+                                onTap: widget.onStar,
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  transitionBuilder: (child, anim) => ScaleTransition(scale: anim, child: child),
+                                  child: Icon(
+                                    widget.task.isStarred ? Icons.star_rounded : Icons.star_outline_rounded,
+                                    key: ValueKey(widget.task.isStarred),
+                                    color: widget.task.isStarred ? AppColors.warning : scheme.onSurfaceVariant.withValues(alpha: 0.5),
+                                    size: 22,
+                                  ),
                                 ),
                               ),
                             ],
@@ -212,18 +221,63 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                             ),
                           ],
                           const SizedBox(height: 8),
-                          Row(
+                          // Bottom row
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Icon(Icons.calendar_today_outlined, size: 12, color: scheme.onSurfaceVariant.withValues(alpha: 0.6)),
-                              const SizedBox(width: 4),
-                              Text(
-                                DateFormat('MMM d, y').format(widget.task.createdAt),
-                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                      color: scheme.onSurfaceVariant.withValues(alpha: 0.7),
-                                    ),
+                              // Category
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: scheme.outlineVariant.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text('${_categoryEmoji()} ${widget.task.category.name}',
+                                    style: TextStyle(fontSize: 10, color: scheme.onSurfaceVariant)),
                               ),
-                              if (widget.task.isDone) ...[
-                                const SizedBox(width: 8),
+                              // Priority
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: _priorityColor().withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(widget.task.priority.name,
+                                    style: TextStyle(fontSize: 10, color: _priorityColor(), fontWeight: FontWeight.w600)),
+                              ),
+                              // Due date
+                              if (widget.task.dueDate != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: isOverdue ? AppColors.danger.withValues(alpha: 0.12) : scheme.outlineVariant.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.calendar_today_outlined,
+                                          size: 10, color: isOverdue ? AppColors.danger : scheme.onSurfaceVariant),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        DateFormat('MMM d').format(widget.task.dueDate!),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: isOverdue ? AppColors.danger : scheme.onSurfaceVariant,
+                                          fontWeight: isOverdue ? FontWeight.w700 : FontWeight.normal,
+                                        ),
+                                      ),
+                                      if (isOverdue) ...[
+                                        const SizedBox(width: 3),
+                                        const Text('⚠️', style: TextStyle(fontSize: 10)),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              // Done badge
+                              if (widget.task.isDone)
                                 FadeIn(
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -235,34 +289,38 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                                         style: TextStyle(color: AppColors.success, fontSize: 10, fontWeight: FontWeight.w600)),
                                   ),
                                 ),
-                                const Spacer(),
-                                // Delete button on completed tasks
-                                GestureDetector(
-                                  onTap: () async {
-                                    final confirm = await widget.onConfirmDelete();
-                                    if (confirm) widget.onDeleted();
-                                  },
-                                  child: ZoomIn(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.danger.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: const Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 14),
-                                          SizedBox(width: 3),
-                                          Text('Delete', style: TextStyle(color: AppColors.danger, fontSize: 11, fontWeight: FontWeight.w600)),
-                                        ],
-                                      ),
+                            ],
+                          ),
+                          // Delete button on completed tasks
+                          if (widget.task.isDone) ...[
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final confirm = await widget.onConfirmDelete();
+                                  if (confirm) widget.onDeleted();
+                                },
+                                child: ZoomIn(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.danger.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.delete_outline_rounded, color: AppColors.danger, size: 14),
+                                        SizedBox(width: 3),
+                                        Text('Delete', style: TextStyle(color: AppColors.danger, fontSize: 11, fontWeight: FontWeight.w600)),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
-                            ],
-                          ),
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),

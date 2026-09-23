@@ -26,6 +26,9 @@ dependencies:
   animate_do: ^3.3.4
   flutter_staggered_animations: ^1.1.1
 
+  # Extra features
+  shared_preferences: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
